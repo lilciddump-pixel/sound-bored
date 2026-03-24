@@ -6,7 +6,7 @@ void main() {
     debugShowCheckedModeBanner: false,
     home: Scaffold(
       backgroundColor: Colors.black,
-      body: XylophonePage(),
+      body: const XylophonePage(),
     ),
   ));
 }
@@ -19,9 +19,16 @@ class XylophonePage extends StatefulWidget {
 }
 
 class _XylophonePageState extends State<XylophonePage> {
+  AudioPlayer? _player; // single instance for all buttons
+
   void playSound(String fileName) async {
-    final player = AudioPlayer();
-    await player.play(AssetSource('sounds/$fileName'));
+    // Stop previous sound if any
+    if (_player != null) {
+      await _player!.stop();
+    }
+
+    _player = AudioPlayer();
+    await _player!.play(AssetSource('sounds/$fileName'));
   }
 
   Widget buildKey({required List<Color> colors, required String soundFile}) {
